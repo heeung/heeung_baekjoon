@@ -1,58 +1,65 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
+
+import java.util.*;
+import java.io.*;
+
 
 public class Main {
-	static int N, S;
+
+	static int N,S;
 	static int[] arr;
-
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringTokenizer st;
-
-		st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		S = Integer.parseInt(st.nextToken());
+	static int answer = Integer.MAX_VALUE;
+	
+	public static void main(String[] args) throws Exception{
+		init();
 		
-		arr = new int[N];
-		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < N; i++) {
-			if (i == 0) {
-				arr[i] = Integer.parseInt(st.nextToken());
-			} else {
-				arr[i] = arr[i - 1] + Integer.parseInt(st.nextToken());
+		int[] sumArr = prefix();
+		
+		int startIdx = 0;
+		int endIdx = 1;
+		
+		while(true) {
+			
+			int partSum = sumArr[endIdx]-sumArr[startIdx];
+			
+			if(partSum >= S) {
+				answer = Math.min(answer, endIdx-startIdx);
+				startIdx++;
+			}else {
+				if(endIdx == N) startIdx++;
+				else endIdx++;
 			}
+			
+			if(startIdx == N) break;
+			
 		}
-				
-		int min = Integer.MAX_VALUE;
-		boolean flag = false;
-		for (int i = 0; i < N; i++) {
-			if (arr[i] < S)
-				continue ;
-			if (i == 0) {
-				bw.write("1");
-				bw.flush();
-				return ;
-			}
-			int cnt = 1;
-			for (int j = i - 1; j >= 0; --j) {
-				if (arr[i] - arr[j] >= S) {
-					flag = true;
-					break ;
-				}
-				cnt++;
-			}
-			min = Math.min(min, cnt);
-		}
-		if (!flag && arr[N - 1] != S)
-			bw.write("0");
-		else
-			bw.write(String.valueOf(min));
-		bw.flush();
-	}
+		
+		if(answer == Integer.MAX_VALUE) answer = 0;
+		System.out.println(answer);
 
+
+		
+	}
+	
+	// 누적합 구하기
+	static int[] prefix() {
+		int[] result = new int[N+1];
+		for(int i=1;i<N+1;i++) {
+			result[i] = result[i-1]+arr[i-1];
+		}
+		
+		return result;
+	}
+	
+	static void init() throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String[] NS = br.readLine().split(" ");
+		N = Integer.parseInt(NS[0]);
+		S = Integer.parseInt(NS[1]);
+		arr = new int[N];
+		String[] input = br.readLine().split(" ");
+		for(int i=0;i<N;i++) {
+			arr[i] = Integer.parseInt(input[i]);
+		}
+		
+	}
 }
