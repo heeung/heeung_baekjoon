@@ -1,54 +1,43 @@
-
-import java.util.*;
-import java.io.*;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
 
-	static int N;
-	static int[] potions;
-	static int min = Integer.MAX_VALUE;
-	static int[] answer;
-	
-	public static void main(String[] args) throws Exception{
-		init();
-		
-		solution();
-		
-		System.out.println(answer[0]+" "+answer[1]);
-		
-//		System.out.println(Arrays.toString(answer)+"///"+min);
-	}
-	
-	static void solution() {
-		int start = 0;
-		int end = N-1;
-		while(end>start) {
-			int result = potions[start]+potions[end];
-			if(Math.abs(result)<=min) {
-				min = Math.abs(result);
-				answer[0] = potions[start];
-				answer[1] = potions[end];
-			}
-			if(result<0) {
-				start++;
-			}else if(result>0) {
-				end--;
-			}else {
-				break;
-			}
-		}
-	}
-	
-	
-	static void init() throws Exception {
+	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		N = Integer.parseInt(br.readLine());
-		String[] input = br.readLine().split(" ");
-		potions = new int[N];
-		for(int i=0;i<N;i++) {
-			potions[i] = Integer.parseInt(input[i]);
+		StringTokenizer st;
+
+		int N = Integer.parseInt(br.readLine());
+		st = new StringTokenizer(br.readLine());
+
+		int[] arr = new int[N];
+		for (int i = 0; i < N; i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
 		}
-		answer = new int[2];
+
+		int head = 0;
+		int tail = N - 1;
+		int hret = 0;
+		int tret = 0;
+		Long min = Long.MAX_VALUE;
+
+		while (head < tail) {
+			long sum = arr[head] + arr[tail];
+			if (min > Math.abs(sum)) {
+				min = Math.abs(sum);
+				hret = head;
+				tret = tail;
+			}
+			if (sum >= 0) {
+				tail--;
+			} else {
+				head++;
+			}
+		}
+		
+		System.out.println(arr[hret] + " " + arr[tret]);
 	}
+
 }
