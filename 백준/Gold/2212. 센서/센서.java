@@ -1,47 +1,38 @@
-
-import java.util.*;
-import java.io.*;
-
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
 
 public class Main {
+	
+	static int K, N;
 
-	static List<Integer> sensor = new ArrayList<>();
-	static List<Integer> distances = new ArrayList<>();
-	static int N,K;
-	static int answer=0;
-	
-	public static void main(String[] args) throws Exception{
-		init();
-		getDistances();
-		answer = count();
-		System.out.println(answer);
-	}
-	
-	static int count() {
-		for(int i=0;i<N-K;i++) {
-			answer += distances.get(i);
-		}
-		return answer;
-	}
-	
-	static void getDistances() {
-		for(int i=0;i<N-1;i++) {
-			int distance = sensor.get(i+1)-sensor.get(i);
-//			if(distance!=0) distances.add(distance);
-			distances.add(distance);
-		}
-		Collections.sort(distances);
-		
-	}
-	
-	static void init() throws Exception {
+	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st;
+		
 		N = Integer.parseInt(br.readLine());
 		K = Integer.parseInt(br.readLine());
-		String[] input = br.readLine().split(" ");
-		for(int i=0;i<N;i++) {
-			sensor.add(Integer.parseInt(input[i]));
+		
+		int[] sensor = new int[N];
+		st = new StringTokenizer(br.readLine());
+		for (int i = 0; i < N; i++) {
+			sensor[i] = Integer.parseInt(st.nextToken());
 		}
-		Collections.sort(sensor);
+		
+		Arrays.sort(sensor);
+		
+		PriorityQueue<Integer> q = new PriorityQueue<Integer>();
+		for (int i = 0; i < N - 1; i++) {
+			q.offer(sensor[i + 1] - sensor[i]);
+		}
+		int cnt = 0;
+		for (int i = 0; i < N - 1 - (K - 1); i++) {
+			cnt += q.poll();
+		}
+		System.out.println(cnt);
 	}
+
 }
