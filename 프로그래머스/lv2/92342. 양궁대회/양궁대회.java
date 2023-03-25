@@ -1,83 +1,53 @@
-import java.io.*;
 import java.util.*;
 
 class Solution {
-    static List<int[]> result = new ArrayList<>();
-	static int[] apeach, ryan;
-	static int N;
-	static int max = 0;
-	static int[] staticAnswer;
-    
+	
+	static int[] apeach;
+	static int[] ans = {-1};
+	static int N, max, lionPoint, apeachPoint, diff;
+	
     public int[] solution(int n, int[] info) {
+        
         apeach = info;
-    	N = n;
-    	ryan = new int[11];
-        int[] answer = {};
+        N = n;
+        max = Integer.MIN_VALUE;
+        combination(new int[11], 0, 0);
         
-  
-        backtracking(0,0);
-        
-        if(max != 0) answer = getAnswer();
-        else return new int[] {-1};
-        
-        return answer;
+        System.out.println(Arrays.toString(ans));
+        return ans;
     }
     
-    static int[] getAnswer() {
-    	int[] arr = new int[11];
-    	for(int i=10;i>-1;i--) {
-    		for(int j=0;j<result.size();j++) {
-    			if(result.get(j)[i] > arr[i]) return result.get(j);
+    public static void combination(int[] comb, int arrow, int idx) {
+    	if (arrow == N) {
+    		getPoints(comb);
+    		if (lionPoint > apeachPoint) {
+    			if (max <= lionPoint - apeachPoint) {
+    				ans = comb.clone();
+    				max = Math.max(lionPoint - apeachPoint, max);
+    			}
     		}
+    		return ;
     	}
-    	return arr;
+    	
+    	
+    	for (int i = 0; i < 11 && comb[i] <= apeach[i]; i++) {
+    		comb[i]++;
+    		combination(comb, arrow + 1, i);
+    		comb[i]--;
+    	}
+    	
     }
     
-    static void search(int[] ryan) {
-    	int score = calculation();
-    	if(score>0 && score >= max) {
-            if(score>max) result.clear();
-    		max = score;
-    		// System.out.println(score+"@@@@@@@@@@@@@@@@@@@@@@@@@2");
-    		result.add(ryan.clone());
-    	}
-    }
-    
-    static int calculation() {
-    	int ryanScore = 0;
-    	int apeachScore = 0;
-    	
-    	for(int i=0;i<11;i++) {
-    		if(ryan[i]>apeach[i]) ryanScore += 10-i;
-    		else if(apeach[i]!=0 && apeach[i]>=ryan[i]) apeachScore += 10-i;
-    	}
-    	
-    	return ryanScore - apeachScore;
-    }
-    
-    static void backtracking(int start, int cnt) {
-    	if(cnt==N) {
-    		// System.out.println(Arrays.toString(ryan));
-    		search(ryan);
-    		return;
-    	}
-    	
-    	for(int i=start;i<10;i++) {
-//    		System.out.println(N-cnt+"//"+apeach[i]);
-    		
-    		if(N-cnt>apeach[i]) {
-    			ryan[i] = apeach[i]+1;
-    			cnt += apeach[i]+1;
-    			backtracking(i+1,cnt);
-    			cnt -= apeach[i]+1;
-    			ryan[i] = 0;
-    		}
-    	}
-    	ryan[10] = N-cnt;
-		cnt = N;
-		backtracking(11,cnt);
-		cnt -= ryan[10];
-		ryan[10] = 0;
-    	
+    public static void getPoints(int[] comb) {
+    	lionPoint  = 0;
+		apeachPoint = 0;
+		for (int i = 0; i < 11; i++) {
+			if (apeach[i] != 0 || comb[i] != 0) {
+				if (apeach[i] < comb[i])
+					lionPoint += 10 - i;
+				else
+					apeachPoint += 10 - i;
+			}
+		}
     }
 }
