@@ -5,7 +5,7 @@ public class Main {
 	
 	static int N, K;
 	static int[] arr;
-	static long[] dp;
+	static int[] dp;
 	
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -21,8 +21,9 @@ public class Main {
         for (int i = 0; i < N; i++)
             arr[i] = Integer.parseInt(st.nextToken());
 
-        dp = new long[N + 1];
-        long sum = arr[0];
+        dp = new int[N + 1];
+        int sum = arr[0];
+        // 투 포인터
         int leftIdx = 0;
         int rightIdx = 1;
 
@@ -34,12 +35,13 @@ public class Main {
                 }
             } else {
                 dp[rightIdx] = Math.max(dp[rightIdx], dp[rightIdx - 1]);
-
+                
                 if (rightIdx == N)
                     break;
-
+                
                 sum += arr[rightIdx++];
             }
+//            System.out.println(Arrays.toString(dp));
         }
 
         System.out.println(dp[N]);
