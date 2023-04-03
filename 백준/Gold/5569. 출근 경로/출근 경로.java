@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-	static long[][][] dp;
+	static int[][][] dp;
 	static int W, H;
 
 	public static void main(String[] args) throws IOException {
@@ -22,7 +22,7 @@ public class Main {
 		 * 3. 위쪽인데 턴 함.
 		 * => 3차원 설계
 		 */
-		dp = new long[W + 1][H + 1][4];
+		dp = new int[W + 1][H + 1][4];
 		// 초기에는 꺾지 않은 경우로 모두 넣어주기
 		for (int i = 1; i <= H; i++) {
 			dp[1][i][2] = 1;
