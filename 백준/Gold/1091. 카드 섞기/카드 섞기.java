@@ -41,17 +41,17 @@ public class Main {
     }
 
     static void shuffle() {
-        int[] t = new int[N];
+        int[] tmp = new int[N];
         for (int i =0; i < N; i++) {
-            t[S[i]] = cards[i];
+            tmp[S[i]] = cards[i];
         }
-        cards = t.clone();
+        cards = tmp.clone();
     }
 
     static boolean check() {
         for (int i = 0; i < N; i++) {
-            int x = cards[i];
-            if (P[x] != i % 3) {
+            int now = cards[i];
+            if (P[now] != i % 3) {
                 return false;
             }
         }
